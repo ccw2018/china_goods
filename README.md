@@ -9,7 +9,7 @@
 ## GitHub Pages 发布
 
 1. 在 GitHub 创建公开仓库。
-2. 上传 `index.html`、`style.css`、`product-details.js`、`script.js` 和 `.nojekyll` 到仓库根目录。
+2. 上传 `index.html`、`style.css`、`product-details.js`、`script.js`、`robots.txt`、`sitemap.xml` 和 `.nojekyll` 到仓库根目录。
 3. 在 Settings → Pages 中选择 Deploy from a branch，选择 main 和 / (root)，点击 Save。
 4. 等待 Actions 部署完成，访问 Pages 页面提供的网址。
 
@@ -37,3 +37,8 @@ GA4 已启用，Measurement ID 为 G-QBJ14C4KWS；2026-09-21 已核对原线上�
 数值是编辑选型示例，不是特定在售型号的已验证参数；没有实际报价，不宣称最低价或具体节省比例。页面强调使用成本、维护、能耗和适配性。三项官方技术参考位于对应参数展开区，其他参数为建议询价条件。
 
 本轮新版尚未发布。发布时必须同时上传 product-details.js、index.html、script.js、style.css，避免新首页缺少内容文件。
+## SEO
+
+`<head>` 内提供 canonical、Open Graph、Twitter Card、favicon，并以 JSON-LD 输出 `WebSite`（含 SearchAction）与 `ItemList`（30 项商品的中英文名称与跳转链接）。商品正文由 JS 动态渲染，JSON-LD 让不执行 JavaScript 的爬虫也能读取商品清单。`robots.txt` 与 `sitemap.xml` 辅助搜索引擎索引。
+
+注意：JSON-LD 与 product-details.js 是两份数据，增删商品或改名称时需同步更新，否则结构化数据与实际内容不一致。

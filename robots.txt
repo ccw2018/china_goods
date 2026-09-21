@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ccw2018.github.io/china_goods/sitemap.xml
