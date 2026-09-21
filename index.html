@@ -18,6 +18,7 @@
   <meta name="twitter:title" content="Source China — Product Directory">
   <meta name="twitter:description" content="Curated directory of 30 made-in-China products with English and Chinese names, selection specs and value notes.">
   <link rel="stylesheet" href="style.css">
+  <script src="i18n.js" defer></script>
   <script src="product-details.js" defer></script>
   <script src="script.js" defer></script>
   <!-- Google tag (gtag.js) -->
@@ -87,26 +88,26 @@
   </script>
 </head>
 <body>
-  <header class="masthead"><a class="brand" href="./"><span class="brand-icon">S<span>↗</span></span> SOURCE CHINA<span class="brand-dot">®</span></a><a class="header-link" href="#directory">Explore the directory ↗</a></header>
+  <header class="masthead"><a class="brand" href="./"><span class="brand-icon">S<span>↗</span></span> SOURCE CHINA<span class="brand-dot">®</span></a><div class="header-actions"><a class="header-link" href="#directory"><span data-i18n="explore">Explore the directory</span> ↗</a><select id="lang-select" aria-label="Language"><option value="en">English</option><option value="zh">简体中文</option><option value="pt">Português</option><option value="es">Español</option></select></div></header>
   <main>
     <section class="hero">
-      <div class="eyebrow"><span></span> MADE IN CHINA. FOUND HERE.</div>
-      <h1>Small components.<br><em>Big possibilities.</em></h1>
-      <div class="hero-bottom"><p>High-performance choices. Thoughtful sourcing.<br>Explore specifications, applications and long-term value.</p><a class="jump" href="#directory" aria-label="Browse products">↓</a></div>
-      <div class="hero-stamp" aria-hidden="true">中国制造<br><span>GLOBAL POSSIBILITIES</span></div>
+      <div class="eyebrow"><span></span> <span data-i18n="hero_eyebrow">MADE IN CHINA. FOUND HERE.</span></div>
+      <h1><span data-i18n="hero_title_1">Small components.</span><br><em data-i18n="hero_title_2">Big possibilities.</em></h1>
+      <div class="hero-bottom"><p><span data-i18n="hero_desc_1">High-performance choices. Thoughtful sourcing.</span><br><span data-i18n="hero_desc_2">Explore specifications, applications and long-term value.</span></p><a class="jump" href="#directory" aria-label="Browse products">↓</a></div>
+      <div class="hero-stamp" aria-hidden="true"><span data-i18n="stamp_1">中国制造</span><br><span data-i18n="stamp_2">GLOBAL POSSIBILITIES</span></div>
     </section>
     <section id="directory" class="directory" aria-labelledby="directory-title">
-      <div class="section-top"><div><div class="eyebrow">THE PRODUCT INDEX</div><h2 id="directory-title">Find your next product.</h2></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search products / 搜索商品" aria-label="Search products in English or Chinese"></label></div>
-      <p class="buying-note">Choose with confidence: explore performance-focused buying briefs and value considerations. Technical figures are example selection targets, not verified specifications of the suppliers linked below. Confirm the exact model, test conditions and quotation before ordering.</p>
+      <div class="section-top"><div><div class="eyebrow" data-i18n="section_eyebrow">THE PRODUCT INDEX</div><h2 id="directory-title" data-i18n="section_title">Find your next product.</h2></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search products" data-i18n-placeholder="search_placeholder" aria-label="Search products"></label></div>
+      <p class="buying-note" data-i18n="buying_note">Choose with confidence: explore performance-focused buying briefs and value considerations. Technical figures are example selection targets, not verified specifications of the suppliers linked below. Confirm the exact model, test conditions and quotation before ordering.</p>
       <div id="filters" class="filters" aria-label="Filter by category"></div>
-      <div class="results-line"><span id="result-count" aria-live="polite"></span><span>ENGLISH NAME / 中文名称</span></div>
+      <div class="results-line"><span id="result-count" aria-live="polite"></span><span data-i18n="name_label">PRODUCT NAME</span></div>
       <div id="products" class="products"></div>
-      <p id="empty" hidden>No products found. Try “bearing”, “solar”, or “轴承”.</p>
+      <p id="empty" hidden data-i18n="empty">No products found. Try “bearing”, “solar”, or “轴承”.</p>
       <noscript>Please enable JavaScript to browse this product directory.</noscript>
-      <div class="directory-note"><span>↗</span> Product names open Alibaba search in a new tab. A curated directory, not a live sales ranking.</div>
+      <div class="directory-note"><span>↗</span> <span data-i18n="directory_note">Product names open Alibaba search in a new tab. A curated directory, not a live sales ranking.</span></div>
     </section>
-    <section class="closing"><span>BUILT TO CONNECT.</span><p>From China.<br>To your next idea.</p><a href="#directory">Explore products ↗</a></section>
+    <section class="closing"><span data-i18n="closing_1">BUILT TO CONNECT.</span><p><span data-i18n="closing_2">From China.</span><br><span data-i18n="closing_3">To your next idea.</span></p><a href="#directory"><span data-i18n="closing_link">Explore products</span> ↗</a></section>
   </main>
-  <footer><div><a class="footer-brand" href="./">SOURCE CHINA ↗</a><p>An independent product discovery directory.</p></div><div class="visits"><span class="status-dot"></span> 本页访问次数 <strong id="busuanzi_value_page_pv">加载中…</strong><small>Page views · Powered by <a href="https://ibruce.info/2015/04/04/busuanzi/" target="_blank" rel="noopener noreferrer">不蒜子</a> · This site uses Google Analytics</small></div></footer>
+  <footer><div><a class="footer-brand" href="./">SOURCE CHINA ↗</a><p data-i18n="footer_tagline">An independent product discovery directory.</p></div><div class="visits"><span class="status-dot"></span> <span data-i18n="visits_label">本页访问次数</span> <strong id="busuanzi_value_page_pv" data-i18n="counter_loading">加载中…</strong><small><span data-i18n="powered_by">Powered by</span> <a href="https://ibruce.info/2015/04/04/busuanzi/" target="_blank" rel="noopener noreferrer">不蒜子</a> · <span data-i18n="ga_notice">This site uses Google Analytics</span></small></div></footer>
 </body>
 </html>

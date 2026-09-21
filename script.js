@@ -1,76 +1,119 @@
-const items = [
-  ['High-Speed Bearings','高速轴承','Industrial'],['Deep Groove Ball Bearings','深沟球轴承','Industrial'],['Linear Guide Rails','直线导轨','Industrial'],['Ball Screws','滚珠丝杠','Industrial'],['CNC Machined Parts','数控加工零件','Industrial'],['Servo Motors','伺服电机','Industrial'],
-  ['Lithium-Ion Batteries','锂离子电池','Energy'],['Solar Panels','太阳能电池板','Energy'],['Solar Inverters','光伏逆变器','Energy'],['Portable Power Stations','便携式储能电源','Energy'],['EV Charging Stations','电动汽车充电桩','Energy'],['LiFePO4 Battery Packs','磷酸铁锂电池组','Energy'],
-  ['Printed Circuit Boards','印刷电路板','Electronics'],['LED Strip Lights','LED灯带','Electronics'],['USB-C Chargers','USB-C充电器','Electronics'],['Wireless Earbuds','无线耳机','Electronics'],['Smart Watches','智能手表','Electronics'],['Security Cameras','安防摄像头','Electronics'],
-  ['Stainless Steel Fasteners','不锈钢紧固件','Hardware'],['Power Drills','电钻','Hardware'],['Aluminum Extrusions','铝型材','Hardware'],['Water Pumps','水泵','Hardware'],['Pneumatic Cylinders','气缸','Hardware'],['Diamond Saw Blades','金刚石锯片','Hardware'],
-  ['Insulated Water Bottles','保温水壶','Lifestyle'],['Robot Vacuum Cleaners','扫地机器人','Lifestyle'],['Air Fryers','空气炸锅','Lifestyle'],['Camping Tents','露营帐篷','Lifestyle'],['Electric Bicycles','电动自行车','Lifestyle'],['Travel Backpacks','旅行背包','Lifestyle']
-];
-const catalog = items.map((item, index) => {
-  const [en, zh, description, specs, value] = productDetails[index];
-  return {en, zh, group: item[2], description, specs, value};
-});
+// Shared page-view counts require a hosted service; never substitute local counts.
+
 const references = {
-  'Precision High-Speed Spindle Bearings': ['Bearing selection guide · SKF', 'https://cdn.skfmediahub.skf.com/api/public/0901d19680495562/pdf_preview_medium/Super-precision_bearings_catalogue_-_13383_2_EN_pdf_preview_medium.pdf'],
-  'High-Efficiency N-Type Solar Modules': ['Technology reference · Trinasolar', 'https://www.trinasolar.com/us/pv-module'],
-  'GaN USB-C Power Delivery Chargers': ['USB-C technology reference · Texas Instruments', 'https://www.ti.com/technologies/usb-type-c.html']
+  'Precision High-Speed Spindle Bearings': {
+    url: 'https://cdn.skfmediahub.skf.com/api/public/0901d19680495562/pdf_preview_medium/Super-precision_bearings_catalogue_-_13383_2_EN_pdf_preview_medium.pdf',
+    label: {
+      en: 'Bearing selection guide · SKF',
+      zh: '轴承选型指南 · SKF',
+      pt: 'Guia de seleção de rolamentos · SKF',
+      es: 'Guía de selección de rodamientos · SKF'
+    }
+  },
+  'High-Efficiency N-Type Solar Modules': {
+    url: 'https://www.trinasolar.com/us/pv-module',
+    label: {
+      en: 'Technology reference · Trinasolar',
+      zh: '技术参考 · 天合光能',
+      pt: 'Referência técnica · Trinasolar',
+      es: 'Referencia técnica · Trinasolar'
+    }
+  },
+  'GaN USB-C Power Delivery Chargers': {
+    url: 'https://www.ti.com/technologies/usb-type-c.html',
+    label: {
+      en: 'USB-C technology reference · Texas Instruments',
+      zh: 'USB-C 技术参考 · 德州仪器',
+      pt: 'Referência técnica USB-C · Texas Instruments',
+      es: 'Referencia técnica USB-C · Texas Instruments'
+    }
+  }
 };
+
 let category = 'All products';
 const search = document.getElementById('search');
 const products = document.getElementById('products');
-const categories = ['All products', ...new Set(items.map(item => item[2]))];
-for (const name of categories) {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.textContent = name;
-  button.setAttribute('aria-pressed', String(name === category));
-  button.addEventListener('click', () => {
-    category = name;
-    for (const filter of document.querySelectorAll('#filters button')) filter.setAttribute('aria-pressed', String(filter === button));
-    render();
-  });
-  document.getElementById('filters').append(button);
+const filters = document.getElementById('filters');
+const langSelect = document.getElementById('lang-select');
+const counter = document.getElementById('busuanzi_value_page_pv');
+
+function syncHtmlLang(code) {
+  if (code === 'zh') document.documentElement.lang = 'zh-CN';
+  else if (code === 'pt') document.documentElement.lang = 'pt-BR';
+  else document.documentElement.lang = code;
 }
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder'))); });
+}
+
+function buildFilters() {
+  const categories = ['All products', ...new Set(productDetails.map(item => item.category))];
+  filters.replaceChildren();
+  for (const name of categories) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = categoryName(name);
+    button.setAttribute('aria-pressed', String(name === category));
+    button.addEventListener('click', () => {
+      category = name;
+      for (const f of filters.querySelectorAll('button')) f.setAttribute('aria-pressed', String(f === button));
+      render();
+    });
+    filters.append(button);
+  }
+}
+
+function haystackOf(item) {
+  return [
+    item.name.en, item.name.zh, item.name.pt, item.name.es,
+    item.category,
+    item.description.en, item.description.zh, item.description.pt, item.description.es,
+    ...item.specs.en, ...item.specs.zh, ...item.specs.pt, ...item.specs.es,
+    item.value.en, item.value.zh, item.value.pt, item.value.es
+  ].join(' ').toLowerCase();
+}
+
 function render() {
   const query = search.value.trim().toLowerCase();
-  const matches = catalog.filter(item => (category === 'All products' || item.group === category) && [item.en, item.zh, item.group, item.description, ...item.specs, item.value].join(' ').toLowerCase().includes(query));
+  const matches = productDetails.filter(item => (category === 'All products' || item.category === category) && haystackOf(item).includes(query));
   products.replaceChildren();
-  for (const {en, zh, group, description, specs, value} of matches) {
+  for (const item of matches) {
     const card = document.createElement('article');
     card.className = 'product';
     const link = document.createElement('a');
     link.className = 'product-name';
-    link.href = 'https://www.alibaba.com/trade/search?SearchText=' + encodeURIComponent(en);
+    link.href = 'https://www.alibaba.com/trade/search?SearchText=' + encodeURIComponent(item.name.en);
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.textContent = en + ' ↗';
+    link.textContent = item.name[currentLang] + ' ↗';
     const label = document.createElement('div');
     label.className = 'product-top';
-    label.textContent = group;
+    label.textContent = categoryName(item.category);
     const heading = document.createElement('h3');
     heading.append(link);
-    const translation = document.createElement('p');
-    translation.lang = 'zh-CN';
-    translation.textContent = zh;
     const intro = document.createElement('p');
     intro.className = 'product-description';
-    intro.textContent = description;
+    intro.textContent = item.description[currentLang];
     const details = document.createElement('details');
     const summary = document.createElement('summary');
-    summary.textContent = 'Technical selection guide / 技术参数';
+    summary.textContent = t('spec_guide');
     const caption = document.createElement('p');
     caption.className = 'spec-caption';
-    caption.textContent = 'Reference targets · Confirm per model';
+    caption.textContent = t('spec_caption');
     const list = document.createElement('ul');
-    for (const spec of specs) {
+    for (const spec of item.specs[currentLang]) {
       const row = document.createElement('li');
       row.textContent = spec;
       list.append(row);
     }
     details.append(summary, caption, list);
-    if (references[en]) {
+    if (references[item.name.en]) {
+      const ref = references[item.name.en];
       const source = document.createElement('a');
-      source.textContent = references[en][0];
-      source.href = references[en][1];
+      source.textContent = ref.label[currentLang];
+      source.href = ref.url;
       source.target = '_blank';
       source.rel = 'noopener noreferrer';
       source.className = 'spec-source';
@@ -79,31 +122,43 @@ function render() {
     const valueBox = document.createElement('div');
     valueBox.className = 'value-note';
     const valueTitle = document.createElement('strong');
-    valueTitle.textContent = 'VALUE FOCUS / 性价比';
+    valueTitle.textContent = t('value_focus');
     const valueText = document.createElement('p');
-    valueText.textContent = value;
+    valueText.textContent = item.value[currentLang];
     valueBox.append(valueTitle, valueText);
-    card.append(label, heading, translation, intro, details, valueBox);
+    card.append(label, heading, intro, details, valueBox);
     products.append(card);
   }
-  document.getElementById('result-count').textContent = `${matches.length} PRODUCTS / ${category.toUpperCase()}`;
+  document.getElementById('result-count').textContent = countText(matches.length, category);
   document.getElementById('empty').hidden = matches.length !== 0;
 }
+
 search.addEventListener('input', render);
+
+document.addEventListener('langchange', () => {
+  applyTranslations();
+  buildFilters();
+  render();
+});
+
+syncHtmlLang(currentLang);
+applyTranslations();
+buildFilters();
 render();
-// Shared page-view counts require a hosted service; never substitute local counts.
-const counter = document.getElementById('busuanzi_value_page_pv');
+langSelect.value = currentLang;
+langSelect.addEventListener('change', () => setLang(langSelect.value));
+
 if (!['http:', 'https:'].includes(location.protocol) || ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
-  counter.textContent = '发布后启用';
+  counter.textContent = t('counter_local');
 } else {
-  const timeout = setTimeout(() => { if (!/^\d+$/.test(counter.textContent.trim())) counter.textContent = '暂不可用'; }, 10000);
+  const timeout = setTimeout(() => { if (!/^\d+$/.test(counter.textContent.trim())) counter.textContent = t('counter_unavailable'); }, 10000);
   const observer = new MutationObserver(() => {
     if (/^\d+$/.test(counter.textContent.trim())) { clearTimeout(timeout); observer.disconnect(); }
   });
-  observer.observe(counter, {childList: true, subtree: true, characterData: true});
+  observer.observe(counter, { childList: true, subtree: true, characterData: true });
   const script = document.createElement('script');
   script.async = true;
   script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-  script.onerror = () => { clearTimeout(timeout); counter.textContent = '暂不可用'; observer.disconnect(); };
+  script.onerror = () => { clearTimeout(timeout); counter.textContent = t('counter_unavailable'); observer.disconnect(); };
   document.head.append(script);
 }

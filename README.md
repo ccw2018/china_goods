@@ -42,3 +42,14 @@ GA4 已启用，Measurement ID 为 G-QBJ14C4KWS；2026-09-21 已核对原线上�
 `<head>` 内提供 canonical、Open Graph、Twitter Card、favicon，并以 JSON-LD 输出 `WebSite`（含 SearchAction）与 `ItemList`（30 项商品的中英文名称与跳转链接）。商品正文由 JS 动态渲染，JSON-LD 让不执行 JavaScript 的爬虫也能读取商品清单。`robots.txt` 与 `sitemap.xml` 辅助搜索引擎索引。
 
 注意：JSON-LD 与 product-details.js 是两份数据，增删商品或改名称时需同步更新，否则结构化数据与实际内容不一致。
+## 语言（i18n）
+
+页面支持四种语言切换：英文（默认）、简体中文、葡萄牙语（巴西葡语 pt-BR）、西班牙语（拉美西语）。右上角提供下拉选择器，选择会写入 localStorage（key `source-china-lang`），下次访问自动沿用，并同步 `<html lang>` 属性。
+
+语言资源分三处：
+
+- `i18n.js`：界面文案字典（`UI`，4 语言）、类别名（`CATEGORIES`）、语言状态管理（`LANGS`、`currentLang`、`t()`、`categoryName()`、`setLang()`）。
+- `product-details.js`：30 个商品的名称、描述、参数、性价比均按 `{ en, zh, pt, es }` 组织；商品跳转仍使用英文名搜索 Alibaba（英文关键词与货源匹配度最高）。
+- `script.js`：按 `currentLang` 渲染，搜索覆盖全部 4 种语言。
+
+维护提示：新增商品需同时补全 4 种语言文案；葡萄牙语与西班牙语的技术参数译文建议由专业人员审校。
