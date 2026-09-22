@@ -126,7 +126,12 @@ function render() {
     const valueText = document.createElement('p');
     valueText.textContent = item.value[currentLang];
     valueBox.append(valueTitle, valueText);
-    card.append(label, heading, intro, details, valueBox);
+    const inquire = document.createElement('button');
+    inquire.type = 'button';
+    inquire.className = 'inquiry-product';
+    inquire.textContent = inquiryLabel(10);
+    inquire.addEventListener('click', () => document.dispatchEvent(new CustomEvent('product-inquiry', {detail:item.name.en})));
+    card.append(label, heading, intro, details, valueBox, inquire);
     products.append(card);
   }
   document.getElementById('result-count').textContent = countText(matches.length, category);
