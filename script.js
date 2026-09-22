@@ -5,27 +5,18 @@ const references = {
     url: 'https://cdn.skfmediahub.skf.com/api/public/0901d19680495562/pdf_preview_medium/Super-precision_bearings_catalogue_-_13383_2_EN_pdf_preview_medium.pdf',
     label: {
       en: 'Bearing selection guide · SKF',
-      zh: '轴承选型指南 · SKF',
-      pt: 'Guia de seleção de rolamentos · SKF',
-      es: 'Guía de selección de rodamientos · SKF'
     }
   },
   'High-Efficiency N-Type Solar Modules': {
     url: 'https://www.trinasolar.com/us/pv-module',
     label: {
       en: 'Technology reference · Trinasolar',
-      zh: '技术参考 · 天合光能',
-      pt: 'Referência técnica · Trinasolar',
-      es: 'Referencia técnica · Trinasolar'
     }
   },
   'GaN USB-C Power Delivery Chargers': {
     url: 'https://www.ti.com/technologies/usb-type-c.html',
     label: {
       en: 'USB-C technology reference · Texas Instruments',
-      zh: 'USB-C 技术参考 · 德州仪器',
-      pt: 'Referência técnica USB-C · Texas Instruments',
-      es: 'Referencia técnica USB-C · Texas Instruments'
     }
   }
 };
@@ -34,14 +25,9 @@ let category = 'All products';
 const search = document.getElementById('search');
 const products = document.getElementById('products');
 const filters = document.getElementById('filters');
-const langSelect = document.getElementById('lang-select');
 const counter = document.getElementById('busuanzi_value_page_pv');
 
-function syncHtmlLang(code) {
-  if (code === 'zh') document.documentElement.lang = 'zh-CN';
-  else if (code === 'pt') document.documentElement.lang = 'pt-BR';
-  else document.documentElement.lang = code;
-}
+
 
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
@@ -65,15 +51,7 @@ function buildFilters() {
   }
 }
 
-function haystackOf(item) {
-  return [
-    item.name.en, item.name.zh, item.name.pt, item.name.es,
-    item.category,
-    item.description.en, item.description.zh, item.description.pt, item.description.es,
-    ...item.specs.en, ...item.specs.zh, ...item.specs.pt, ...item.specs.es,
-    item.value.en, item.value.zh, item.value.pt, item.value.es
-  ].join(' ').toLowerCase();
-}
+function haystackOf(item) { return [item.name.en, item.category, item.description.en, ...item.specs.en, item.value.en].join(" ").toLowerCase(); }
 
 function render() {
   const query = search.value.trim().toLowerCase();
@@ -140,18 +118,12 @@ function render() {
 
 search.addEventListener('input', render);
 
-document.addEventListener('langchange', () => {
-  applyTranslations();
-  buildFilters();
-  render();
-});
 
-syncHtmlLang(currentLang);
+
+document.documentElement.lang = "en";
 applyTranslations();
 buildFilters();
 render();
-langSelect.value = currentLang;
-langSelect.addEventListener('change', () => setLang(langSelect.value));
 
 if (!['http:', 'https:'].includes(location.protocol) || ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
   counter.textContent = t('counter_local');

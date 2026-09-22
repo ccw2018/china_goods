@@ -1,8 +1,5 @@
 const inquiryCopy = {
   en: ['Product inquiry','Your message is private. Formspree processes your contact details so the site owner can reply.','Name *','Email *','Company','Product','Quantity / unit','Message *','General inquiry','Send inquiry','Ask about this product','Not yet available. Please return later.','Sending…','Your inquiry was received. Thank you.','Unable to confirm receipt. Your text is retained; check your connection before retrying.','Submission limit reached. Please try again later.','Please check the form and try again.'],
-  zh: ['产品咨询','留言不会公开。Formspree 将处理你的联系方式和咨询内容，供站主回复。','姓名 *','邮箱 *','公司','感兴趣的商品','采购数量 / 单位','留言内容 *','一般咨询','发送咨询','咨询此商品','咨询尚未开通，请稍后再来。','正在发送…','咨询已收到，谢谢。','无法确认是否收到，内容已保留；请检查网络后再重试。','提交次数达到限制，请稍后重试。','请检查填写内容后重试。'],
-  pt: ['Consulta de produto','Sua mensagem é privada. O Formspree processa seus dados de contato para que o responsável pelo site possa responder.','Nome *','E-mail *','Empresa','Produto','Quantidade / unidade','Mensagem *','Consulta geral','Enviar consulta','Consultar este produto','Ainda indisponível. Volte mais tarde.','Enviando…','Sua consulta foi recebida. Obrigado.','Não foi possível confirmar o recebimento. O texto foi mantido; verifique a conexão antes de tentar novamente.','Limite de envios atingido. Tente mais tarde.','Verifique o formulário e tente novamente.'],
-  es: ['Consulta de producto','Tu mensaje es privado. Formspree procesa tus datos de contacto para que el responsable del sitio pueda responder.','Nombre *','Correo electrónico *','Empresa','Producto','Cantidad / unidad','Mensaje *','Consulta general','Enviar consulta','Consultar este producto','Aún no disponible. Vuelve más tarde.','Enviando…','Tu consulta fue recibida. Gracias.','No se pudo confirmar la recepción. El texto se conserva; revisa la conexión antes de reintentar.','Se alcanzó el límite de envíos. Inténtalo más tarde.','Revisa el formulario e inténtalo de nuevo.']
 };
 const inquiryLabel = index => inquiryCopy[currentLang][index];
 const inquiryEndpoint = /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(window.INQUIRY_ENDPOINT || '') && !/YOUR|PLACEHOLDER/i.test(window.INQUIRY_ENDPOINT) ? window.INQUIRY_ENDPOINT : '';
@@ -69,7 +66,7 @@ function translateInquiry() {
   inquirySubmit.disabled = inquiryBusy || !inquiryEndpoint;
   inquiryStatus.textContent = inquiryStatusKey === null ? '' : inquiryLabel(inquiryStatusKey);
 }
-document.addEventListener('langchange',translateInquiry);
+
 document.addEventListener('product-inquiry',event => {
   if(inquiryBusy) return;
   if(productDetails.some(p=>p.name.en === event.detail)) inquiryFields.product.value = event.detail;

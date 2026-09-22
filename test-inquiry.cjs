@@ -25,15 +25,15 @@ const event=()=>({preventDefault(){},stopImmediatePropagation(){}});
  let s=setup();assert.equal(s.get('inquirySubmit.disabled'),true);await s.get('inquiryForm').events.submit(event());assert.equal(s.calls.length,0);
  s=setup('https://example.com/f/abc');assert.equal(s.get('inquirySubmit.disabled'),true);
  s=setup('https://formspree.io/f/testonly');
- for(const lang of ['en','zh','pt','es']){s.context.currentLang=lang;s.listeners.langchange();assert.ok(s.get('inquirySubmit.textContent'));assert.equal(s.get('inquiryFields.product.children[1].value'),'Bearings');}
+ assert.equal(s.get("inquirySubmit.textContent"),"Send inquiry");
  s.listeners['product-inquiry']({detail:'Bearings'});assert.equal(s.get('inquiryFields.product.value'),'Bearings');assert.equal(s.get('inquiryFields.name.focused'),true);
  const submit=s.get('inquiryForm').events.submit;
  for(const name of ['name','email','message'])s.get('inquiryFields')[name].value=name==='email'?'test@example.com':'TEST ONLY';
  s.get('inquiryForm').valid=false;await submit(event());assert.equal(s.calls.length,0);s.get('inquiryForm').valid=true;
  let finish;s.context.fetch=(url,options)=>{s.calls.push({url,options});return new Promise(resolve=>finish=resolve);};
- const first=submit(event());assert.equal(s.get('inquirySubmit.disabled'),true);await submit(event());assert.equal(s.calls.length,1);finish({ok:true,status:200});await first;assert.equal(s.get('inquiryStatusKey'),13);assert.equal(s.get('inquiryForm.resetCalled'),true);assert.equal(s.calls[0].options.body.data.language,'es');
+ const first=submit(event());assert.equal(s.get('inquirySubmit.disabled'),true);await submit(event());assert.equal(s.calls.length,1);finish({ok:true,status:200});await first;assert.equal(s.get('inquiryStatusKey'),13);assert.equal(s.get('inquiryForm.resetCalled'),true);assert.equal(s.calls[0].options.body.data.language,'en');
  for(const status of [429,422,500]){s.context.fetch=async()=>({ok:false,status});s.get('inquiryFields.message').value='retain this';await submit(event());assert.equal(s.get('inquiryFields.message.value'),'retain this');assert.equal(s.get('inquiryStatusKey'),status===429?15:status===422?16:14);}
  s.context.fetch=async()=>{throw Error('offline');};await submit(event());assert.equal(s.get('inquiryStatusKey'),14);assert.equal(s.get('inquirySubmit.disabled'),false);
  s.get('honeypot').value='spam';await submit(event());assert.equal(s.get('inquiryStatusKey'),16);
- console.log('PASS: disabled endpoint, four languages, product selection, invalid form, duplicate submission, success, 429/422/500, network failure, honeypot. Mock requests only.');
+ console.log('PASS: disabled endpoint, English interface, product selection, invalid form, duplicate submission, success, 429/422/500, network failure, honeypot. Mock requests only.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

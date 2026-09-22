@@ -69,3 +69,8 @@ GA4 已启用，Measurement ID 为 G-QBJ14C4KWS；2026-09-21 已核对原线上�
 `n接入状态：已配置 https://formspree.io/f/mbglokdq，真实测试返回 HTTP 200 / ok:true。后台记录、邮箱通知和浏览器跨域提交仍待验收；GitHub 登录失效，尚未发布。此前地址为空的描述为历史状态。
 
 咨询表单已发布至 https://ccw2018.github.io/china_goods/#inquiry 。线上表单、产品选择和四语言切换已检查；邮件尚未收到，需在 Formspree 后台检查提交记录、垃圾信息、通知邮箱验证和通知开关。
+
+## 当前语言版本
+
+网站已在本地改为纯英文，旧语言偏好不再生效。商品、搜索及咨询功能保留，咨询 language 固定 en。此前多语言说明为历史记录。
+发布需上传 index.html、i18n.js、product-details.js、script.js、inquiry.js；本次浏览器上传权限被拒绝，尚未上线。
